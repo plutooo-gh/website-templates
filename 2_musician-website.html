@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AVEN — Artist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f0ece4;
+      --dark: #0e0e0e;
+      --accent: #c8a96e;
+      --text: #1a1a1a;
+      --muted: #8a8278;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 64px;
+      z-index: 100;
+      mix-blend-mode: multiply;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-style: italic;
+      letter-spacing: 4px;
+      color: var(--dark);
+    }
+
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      color: var(--dark);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    /* HERO */
+    .hero {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+    }
+
+    .hero-left {
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 60px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(200,169,110,0.15), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      animation: fadeUp 1s ease both;
+    }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(60px, 8vw, 110px);
+      line-height: 0.9;
+      color: #fff;
+      animation: fadeUp 1s 0.15s ease both;
+    }
+
+    .hero-name em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      margin-top: 32px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.45);
+      max-width: 320px;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+      animation: fadeUp 1s 0.45s ease both;
+    }
+
+    .btn-gold {
+      background: var(--accent);
+      color: var(--dark);
+      border: none;
+      padding: 14px 36px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-gold:hover { opacity: 0.85; }
+
+    .btn-outline {
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 14px 36px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+    /* Vinyl decoration */
+    .vinyl {
+      position: absolute;
+      top: 50%;
+      right: -80px;
+      transform: translateY(-50%);
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #1a1a1a 0deg, #2a2a2a 15deg, #1a1a1a 30deg,
+        #2a2a2a 45deg, #1a1a1a 60deg, #2a2a2a 75deg,
+        #1a1a1a 90deg, #2a2a2a 105deg, #1a1a1a 120deg,
+        #2a2a2a 135deg, #1a1a1a 150deg, #2a2a2a 165deg,
+        #1a1a1a 180deg, #2a2a2a 195deg, #1a1a1a 210deg,
+        #2a2a2a 225deg, #1a1a1a 240deg, #2a2a2a 255deg,
+        #1a1a1a 270deg, #2a2a2a 285deg, #1a1a1a 300deg,
+        #2a2a2a 315deg, #1a1a1a 330deg, #2a2a2a 345deg, #1a1a1a 360deg
+      );
+      animation: spin 12s linear infinite;
+      border: 2px solid rgba(200,169,110,0.2);
+    }
+    .vinyl::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.9;
+    }
+
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    .hero-right {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 64px 60px;
+      position: relative;
+    }
+
+    .tracklist-title {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .track {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: padding-left 0.3s;
+    }
+    .track:hover { padding-left: 12px; }
+
+    .track-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--accent);
+      width: 28px;
+    }
+
+    .track-info { flex: 1; padding: 0 20px; }
+
+    .track-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .track-feat {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .track-duration {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .play-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      margin-left: 16px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .track:hover .play-icon {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    /* TOUR */
+    .tour {
+      padding: 100px 64px;
+      background: var(--dark);
+      color: #fff;
+    }
+
+    .tour-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 56px;
+    }
+
+    .tour-title {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .tour-heading {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(32px, 4vw, 56px);
+    }
+
+    .tour-link {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .tour-date {
+      display: grid;
+      grid-template-columns: 120px 1fr 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.2s;
+    }
+
+    .date-box {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .date-day {
+      font-size: 36px;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .date-month {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .date-city {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .date-venue {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 4px;
+    }
+
+    .tickets-btn {
+      background: transparent;
+      border: 1px solid rgba(200,169,110,0.4);
+      color: var(--accent);
+      padding: 10px 24px;
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tickets-btn:hover { background: rgba(200,169,110,0.1); }
+
+    /* FOOTER */
+    footer {
+      padding: 48px 64px;
+      background: var(--bg);
+      border-top: 1px solid rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 28px;
+      letter-spacing: 4px;
+    }
+
+    .footer-socials { display: flex; gap: 24px; }
+    .footer-socials a {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-socials a:hover { color: var(--text); }
+
+    .footer-copy { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; height: auto; }
+      .hero-left { padding: 120px 32px 60px; }
+      .hero-right { padding: 60px 32px; }
+      .vinyl { display: none; }
+      .tour-date { grid-template-columns: 80px 1fr auto; }
+      .date-venue { display: none; }
+      nav, footer { padding-left: 32px; padding-right: 32px; }
+      .tour { padding: 60px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">aven</div>
+    <ul class="nav-links">
+      <li><a href="#">Music</a></li>
+      <li><a href="#">Tour</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Store</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="vinyl"></div>
+      <p class="hero-eyebrow">New Album Out Now</p>
+      <h1 class="hero-name">AVEN<br /><em>echoes</em><br />in void.</h1>
+      <p class="hero-desc">
+        Genre-defying sound built on silence and signal. 
+        Ambient electronic music for those who close their eyes and see color.
+      </p>
+      <div class="hero-btns">
+        <button class="btn-gold">Listen Now</button>
+        <button class="btn-outline">All Albums →</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <p class="tracklist-title">// Tracklist — Echoes in Void</p>
+      <div class="track">
+        <div class="track-num">01</div>
+        <div class="track-info">
+          <div class="track-name">Liminal Space</div>
+          <div class="track-feat">feat. Reva</div>
+        </div>
+        <div class="track-duration">4:12</div>
+        <div class="play-icon">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">02</div>
+        <div class="track-info">
+          <div class="track-name">Signal Lost</div>
+          <div class="track-feat"></div>
+        </div>
+        <div class="track-duration">3:47</div>
+        <div class="play-icon">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">03</div>
+        <div class="track-info">
+          <div class="track-name">Dusk Protocol</div>
+          <div class="track-feat">feat. Milo Vance</div>
+        </div>
+        <div class="track-duration">5:01</div>
+        <div class="play-icon">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">04</div>
+        <div class="track-info">
+          <div class="track-name">Cold Light</div>
+          <div class="track-feat"></div>
+        </div>
+        <div class="track-duration">3:58</div>
+        <div class="play-icon">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">05</div>
+        <div class="track-info">
+          <div class="track-name">Last Transmission</div>
+          <div class="track-feat">feat. Sola</div>
+        </div>
+        <div class="track-duration">6:22</div>
+        <div class="play-icon">▶</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tour">
+    <div class="tour-header">
+      <div>
+        <p class="tour-title">// Live Dates</p>
+        <h2 class="tour-heading">On Tour 2025</h2>
+      </div>
+      <a href="#" class="tour-link">All Dates →</a>
+    </div>
+    <div class="tour-date">
+      <div class="date-box">
+        <div class="date-day">14</div>
+        <div class="date-month">Sep</div>
+      </div>
+      <div>
+        <div class="date-city">Berlin</div>
+        <div class="date-venue">Berghain Kantine</div>
+      </div>
+      <div></div>
+      <button class="tickets-btn">Tickets</button>
+    </div>
+    <div class="tour-date">
+      <div class="date-box">
+        <div class="date-day">21</div>
+        <div class="date-month">Sep</div>
+      </div>
+      <div>
+        <div class="date-city">Amsterdam</div>
+        <div class="date-venue">Paradiso Noord</div>
+      </div>
+      <div></div>
+      <button class="tickets-btn">Tickets</button>
+    </div>
+    <div class="tour-date">
+      <div class="date-box">
+        <div class="date-day">07</div>
+        <div class="date-month">Oct</div>
+      </div>
+      <div>
+        <div class="date-city">London</div>
+        <div class="date-venue">EartH Theatre</div>
+      </div>
+      <div></div>
+      <button class="tickets-btn">Tickets</button>
+    </div>
+    <div class="tour-date">
+      <div class="date-box">
+        <div class="date-day">19</div>
+        <div class="date-month">Oct</div>
+      </div>
+      <div>
+        <div class="date-city">New York</div>
+        <div class="date-venue">Brooklyn Mirage</div>
+      </div>
+      <div></div>
+      <button class="tickets-btn">Sold Out</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">aven</div>
+    <div class="footer-socials">
+      <a href="#">Spotify</a>
+      <a href="#">Instagram</a>
+      <a href="#">SoundCloud</a>
+      <a href="#">Press</a>
+    </div>
+    <div class="footer-copy">© 2025 AVEN Music. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>

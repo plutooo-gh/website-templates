@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kai Morrish — Software Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: rgba(48, 54, 61, 1);
+      --orange: #f7921a;
+      --blue: #58a6ff;
+      --green: #3fb950;
+      --purple: #bc8cff;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --dim: #21262d;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 56px;
+      z-index: 100;
+      background: rgba(13,17,23,0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      color: var(--orange);
+    }
+
+    .nav-logo::before { content: '~/'; color: var(--muted); }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-hire {
+      background: var(--orange);
+      color: var(--bg);
+      border: none;
+      padding: 9px 22px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: opacity 0.2s;
+    }
+    .nav-hire:hover { opacity: 0.88; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      padding: 100px 56px 60px;
+      gap: 60px;
+    }
+
+    .hero-left {}
+
+    .hero-breadcrumb {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumb-sep { color: var(--orange); }
+
+    .hero-title {
+      font-size: clamp(36px, 4.5vw, 62px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero-title .name { color: var(--orange); }
+
+    .hero-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      color: var(--blue);
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      padding: 5px 14px;
+      border-radius: 4px;
+      background: var(--dim);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .tag.lang { color: var(--green); border-color: rgba(63,185,80,0.2); background: rgba(63,185,80,0.06); }
+    .tag.framework { color: var(--blue); border-color: rgba(88,166,255,0.2); background: rgba(88,166,255,0.06); }
+    .tag.tool { color: var(--purple); border-color: rgba(188,140,255,0.2); background: rgba(188,140,255,0.06); }
+
+    .hero-btns { display: flex; gap: 12px; }
+
+    .btn-primary {
+      background: var(--orange);
+      color: var(--bg);
+      border: none;
+      padding: 13px 32px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 13px 32px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--muted); background: var(--surface); }
+
+    /* Terminal window */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      background: var(--dim);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #28ca41; }
+
+    .terminal-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 8px;
+    }
+
+    .terminal-body {
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .t-prompt { color: var(--green); }
+    .t-cmd { color: var(--text); }
+    .t-comment { color: var(--muted); font-style: italic; }
+    .t-string { color: var(--orange); }
+    .t-key { color: var(--blue); }
+    .t-val { color: var(--purple); }
+    .t-output { color: var(--muted); }
+    .t-blank { display: block; height: 10px; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--orange);
+      vertical-align: middle;
+      animation: blink 1.2s step-end infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* PROJECTS */
+    .section {
+      padding: 80px 56px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 40px;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--orange);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 700;
+    }
+
+    .view-all {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--blue);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .view-all:hover { opacity: 0.7; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+    }
+    .project-card:hover {
+      border-color: rgba(247,146,26,0.4);
+      transform: translateY(-4px);
+    }
+
+    .project-lang-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .project-lang {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .project-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .project-meta {
+      display: flex;
+      gap: 16px;
+    }
+
+    .project-stat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .project-stat span { color: var(--text); }
+
+    /* EXPERIENCE */
+    .experience {
+      padding: 80px 56px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .exp-list { margin-top: 40px; }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 40px;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exp-item:last-child { border-bottom: none; }
+
+    .exp-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .exp-company {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .exp-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+
+    .exp-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--orange);
+    }
+    .footer-logo::before { content: '~/'; color: var(--muted); }
+
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      nav, .hero, .section, .experience, footer { padding-left: 24px; padding-right: 24px; }
+      .hero { grid-template-columns: 1fr; padding-top: 100px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .exp-item { grid-template-columns: 1fr; gap: 8px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">kai-morrish</div>
+    <ul class="nav-links">
+      <li><a href="#">Projects</a></li>
+      <li><a href="#">Experience</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">GitHub</a></li>
+    </ul>
+    <button class="nav-hire">Open to Work</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-breadcrumb">
+        <span>home</span><span class="breadcrumb-sep">/</span>
+        <span>about</span><span class="breadcrumb-sep">/</span>
+        <span style="color:var(--orange)">kai</span>
+      </div>
+      <h1 class="hero-title">
+        Hi, I'm <span class="name">Kai.</span><br />
+        I build things<br />for the web.
+      </h1>
+      <p class="hero-role">// Full-Stack Engineer & Open Source Contributor</p>
+      <p class="hero-desc">
+        I care about fast, accessible, and elegant software. Six years building production systems for startups and scale-ups. Currently available for freelance and full-time roles.
+      </p>
+      <div class="hero-tags">
+        <span class="tag lang">TypeScript</span>
+        <span class="tag lang">Rust</span>
+        <span class="tag lang">Python</span>
+        <span class="tag framework">React</span>
+        <span class="tag framework">Next.js</span>
+        <span class="tag framework">FastAPI</span>
+        <span class="tag tool">Docker</span>
+        <span class="tag tool">PostgreSQL</span>
+      </div>
+      <div class="hero-btns">
+        <button class="btn-primary">View Projects</button>
+        <button class="btn-outline">Download CV</button>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <span class="terminal-title">kai@dev ~ bash</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">❯ </span><span class="t-cmd">cat about.json</span></div>
+        <div class="t-blank"></div>
+        <div><span class="t-comment">// whoami</span></div>
+        <div>{</div>
+        <div>&nbsp;&nbsp;<span class="t-key">"name"</span>: <span class="t-string">"Kai Morrish"</span>,</div>
+        <div>&nbsp;&nbsp;<span class="t-key">"role"</span>: <span class="t-string">"Full-Stack Engineer"</span>,</div>
+        <div>&nbsp;&nbsp;<span class="t-key">"location"</span>: <span class="t-string">"Berlin, Germany"</span>,</div>
+        <div>&nbsp;&nbsp;<span class="t-key">"experience"</span>: <span class="t-val">6</span>,</div>
+        <div>&nbsp;&nbsp;<span class="t-key">"open_to_work"</span>: <span class="t-val">true</span>,</div>
+        <div>&nbsp;&nbsp;<span class="t-key">"coffee_dependency"</span>: <span class="t-val">true</span></div>
+        <div>}</div>
+        <div class="t-blank"></div>
+        <div><span class="t-prompt">❯ </span><span class="t-cmd">uptime</span></div>
+        <div class="t-output">6 years, 2000+ commits, 0 regrets</div>
+        <div class="t-blank"></div>
+        <div><span class="t-prompt">❯ </span><span class="cursor"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div>
+        <p class="section-label">// PROJECTS</p>
+        <h2 class="section-title">Selected Work</h2>
+      </div>
+      <a href="#" class="view-all">view all on github →</a>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-lang"><span class="project-lang-dot" style="background:#3178c6"></span> TypeScript</div>
+        <div class="project-name">nexus-orm</div>
+        <div class="project-desc">Type-safe ORM for PostgreSQL with automatic migration generation and zero-config setup.</div>
+        <div class="project-meta">
+          <div class="project-stat">★ <span>1.4k</span></div>
+          <div class="project-stat">⑂ <span>89</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-lang"><span class="project-lang-dot" style="background:#dea584"></span> Rust</div>
+        <div class="project-name">fastlog</div>
+        <div class="project-desc">Structured logging library for Rust services with async export, filtering, and dashboard integration.</div>
+        <div class="project-meta">
+          <div class="project-stat">★ <span>830</span></div>
+          <div class="project-stat">⑂ <span>44</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-lang"><span class="project-lang-dot" style="background:#3572A5"></span> Python</div>
+        <div class="project-name">apimetrics</div>
+        <div class="project-desc">Plug-and-play performance monitoring for FastAPI apps. One decorator, full telemetry.</div>
+        <div class="project-meta">
+          <div class="project-stat">★ <span>620</span></div>
+          <div class="project-stat">⑂ <span>31</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="experience">
+    <p class="section-label">// EXPERIENCE</p>
+    <h2 class="section-title">Where I've Worked</h2>
+    <div class="exp-list">
+      <div class="exp-item">
+        <div class="exp-date">2023 — Present</div>
+        <div>
+          <div class="exp-company">Vercel</div>
+          <div class="exp-role">// Senior Software Engineer</div>
+          <div class="exp-desc">Working on the Edge Runtime and deployment infrastructure. Improved cold-start performance by 40% through Rust-based worker optimization.</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">2021 — 2023</div>
+        <div>
+          <div class="exp-company">Liveblocks</div>
+          <div class="exp-role">// Full-Stack Engineer</div>
+          <div class="exp-desc">Built real-time collaboration infrastructure handling 10M+ concurrent connections. Designed the public REST API and SDK used by 8,000+ developers.</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">2019 — 2021</div>
+        <div>
+          <div class="exp-company">Startup (stealth)</div>
+          <div class="exp-role">// Frontend Engineer</div>
+          <div class="exp-desc">First engineering hire. Built the entire frontend from scratch in React, shipped to 50k users before acquisition.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">kai-morrish</div>
+    <div class="footer-links">
+      <a href="#">GitHub</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Twitter</a>
+      <a href="#">Email</a>
+    </div>
+    <div class="footer-copy">© 2025 Kai Morrish</div>
+  </footer>
+
+</body>
+</html>

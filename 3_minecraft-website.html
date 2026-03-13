@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexusCraft — The Next Dimension</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #04090f;
+      --panel: #080f18;
+      --border: rgba(0, 200, 255, 0.12);
+      --cyan: #00c8ff;
+      --green: #39ff5a;
+      --purple: #8b5cf6;
+      --text: #c8e6f0;
+      --muted: #4a6670;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Scan line effect */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 48px;
+      z-index: 100;
+      background: rgba(4,9,15,0.9);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 20px;
+      color: var(--cyan);
+      letter-spacing: 2px;
+    }
+
+    .nav-logo span { color: var(--green); }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--cyan);
+      transition: width 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-ip {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      color: var(--green);
+      background: rgba(57,255,90,0.06);
+      border: 1px solid rgba(57,255,90,0.2);
+      padding: 8px 20px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-ip:hover { background: rgba(57,255,90,0.12); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 48px 80px;
+      position: relative;
+    }
+
+    /* Pixel grid decorations */
+    .pixel-deco {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--cyan);
+      opacity: 0.4;
+    }
+    .pixel-deco:nth-child(1) { top: 20%; left: 10%; }
+    .pixel-deco:nth-child(2) { top: 30%; right: 12%; background: var(--green); }
+    .pixel-deco:nth-child(3) { bottom: 25%; left: 15%; background: var(--purple); }
+    .pixel-deco:nth-child(4) { bottom: 35%; right: 8%; }
+
+    .hero-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--cyan);
+      letter-spacing: 3px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-tag::before { content: '> '; }
+
+    .hero-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(52px, 10vw, 130px);
+      line-height: 0.95;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .hero-title .accent { color: var(--cyan); }
+    .hero-title .accent2 { color: var(--green); }
+
+    .hero-sub {
+      max-width: 500px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-top: 24px;
+      font-weight: 400;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-ip-box {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .ip-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+
+    .ip-address {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 28px;
+      color: var(--green);
+      background: rgba(57,255,90,0.06);
+      border: 1px solid rgba(57,255,90,0.25);
+      padding: 16px 48px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .ip-address::before {
+      content: '';
+      position: absolute;
+      top: -4px; left: -4px;
+      width: 12px; height: 12px;
+      border-top: 1px solid var(--green);
+      border-left: 1px solid var(--green);
+    }
+    .ip-address::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; right: -4px;
+      width: 12px; height: 12px;
+      border-bottom: 1px solid var(--green);
+      border-right: 1px solid var(--green);
+    }
+    .ip-address:hover { background: rgba(57,255,90,0.1); }
+
+    .hero-status {
+      display: flex;
+      gap: 48px;
+      margin-top: 64px;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+
+    .status-item { text-align: center; }
+
+    .status-val {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 32px;
+      color: var(--cyan);
+    }
+
+    .status-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .online-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 8px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* GAME MODES */
+    .section {
+      padding: 80px 48px;
+    }
+
+    .section-head {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 48px);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 40px;
+    }
+
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .mode-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .mode-card:hover {
+      border-color: rgba(0,200,255,0.4);
+      transform: translateY(-4px);
+    }
+
+    .mode-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--cyan);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .mode-card:hover::before { opacity: 1; }
+
+    .mode-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .mode-name {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .mode-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .mode-players {
+      margin-top: 20px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: var(--green);
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 80px 48px;
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    .feature {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .feature::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      width: 2px; height: 100%;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+    }
+
+    .feature-title {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 18px;
+      color: var(--cyan);
+    }
+
+    .footer-logo span { color: var(--green); }
+
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--cyan); }
+
+    .footer-copy {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 24px 60px; }
+      .modes-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .section, .features { padding: 60px 24px; }
+      footer { flex-direction: column; gap: 24px; text-align: center; padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">Nexus<span>Craft</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Gamemodes</a></li>
+      <li><a href="#">Store</a></li>
+      <li><a href="#">Vote</a></li>
+      <li><a href="#">Discord</a></li>
+      <li><a href="#">Rules</a></li>
+    </ul>
+    <div class="nav-ip">play.nexuscraft.net</div>
+  </nav>
+
+  <section class="hero">
+    <div class="pixel-deco"></div>
+    <div class="pixel-deco"></div>
+    <div class="pixel-deco"></div>
+    <div class="pixel-deco"></div>
+
+    <p class="hero-tag">NEXUSCRAFT NETWORK — EST. 2021</p>
+    <h1 class="hero-title">
+      The Next<br /><span class="accent">Dimension</span><br /><span class="accent2">Awaits</span>
+    </h1>
+    <p class="hero-sub">
+      Premium Minecraft network with custom gamemodes, an active community, and constant updates. No pay-to-win. Ever.
+    </p>
+    <div class="hero-ip-box">
+      <span class="ip-label">// CONNECT NOW</span>
+      <div class="ip-address">play.nexuscraft.net</div>
+      <span class="ip-label">Java 1.8 — 1.21 | Bedrock Supported</span>
+    </div>
+    <div class="hero-status">
+      <div class="status-item">
+        <div class="status-val"><span class="online-dot"></span>847</div>
+        <div class="status-label">Online Now</div>
+      </div>
+      <div class="status-item">
+        <div class="status-val">4</div>
+        <div class="status-label">Gamemodes</div>
+      </div>
+      <div class="status-item">
+        <div class="status-val">2.1M</div>
+        <div class="status-label">Total Players</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-head">// GAMEMODES</p>
+    <h2 class="section-title">Choose Your World</h2>
+    <div class="modes-grid">
+      <div class="mode-card">
+        <span class="mode-icon">⚔️</span>
+        <div class="mode-name">Factions</div>
+        <div class="mode-desc">Build a base, form alliances, and dominate the map. Full PVP with custom enchants and raids.</div>
+        <div class="mode-players">● 312 online</div>
+      </div>
+      <div class="mode-card">
+        <span class="mode-icon">🏝️</span>
+        <div class="mode-name">SkyBlock</div>
+        <div class="mode-desc">Start with a tiny island and turn it into an empire. Custom upgrades, auctions, and boss fights.</div>
+        <div class="mode-players">● 241 online</div>
+      </div>
+      <div class="mode-card">
+        <span class="mode-icon">🏗️</span>
+        <div class="mode-name">Survival</div>
+        <div class="mode-desc">Classic survival with land claiming, shops, and player-run economies. Balanced and cheat-free.</div>
+        <div class="mode-players">● 188 online</div>
+      </div>
+      <div class="mode-card">
+        <span class="mode-icon">🎮</span>
+        <div class="mode-name">Mini Games</div>
+        <div class="mode-desc">Bedwars, Skywars, Murder Mystery and more. Rotating events with exclusive rewards each season.</div>
+        <div class="mode-players">● 106 online</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <p class="section-head">// WHY NEXUSCRAFT?</p>
+    <h2 class="section-title">Built Different</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-title">No Pay-to-Win</div>
+        <div class="feature-desc">Every rank and perk is purely cosmetic or quality-of-life. Skill wins every time, not your wallet.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Custom Plugins</div>
+        <div class="feature-desc">Fully custom-coded gameplay systems built from scratch. You won't find this anywhere else.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Active Staff</div>
+        <div class="feature-desc">24/7 moderation with real humans. Cheaters are banned fast. Tickets answered same day.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Regular Updates</div>
+        <div class="feature-desc">New content every two weeks. Season resets, new features, and community-voted additions.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Cross-Platform</div>
+        <div class="feature-desc">Java and Bedrock players can play together. No one gets left behind.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-title">Discord Community</div>
+        <div class="feature-desc">14,000+ members, active chats, tournaments, and weekly giveaways. Always something happening.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Nexus<span>Craft</span></div>
+    <div class="footer-links">
+      <a href="#">Discord</a>
+      <a href="#">Store</a>
+      <a href="#">Vote</a>
+      <a href="#">Rules</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">© 2025 NexusCraft Network</div>
+  </footer>
+
+</body>
+</html>
