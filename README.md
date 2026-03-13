@@ -19,11 +19,11 @@
 
 ```
 website-templates/
-├── template-01/
-├── template-02/
-├── template-03/
-├── template-04/
-└── template-05/
+├── 1_youtuber-website/
+├── 2_musician-website/
+├── 3_minecraft-website/
+├── 4_developer-website/
+└── 5_portfolio-website/
 ```
 
 ---
@@ -32,27 +32,23 @@ website-templates/
 
 | # | Template | Description | Preview |
 |---|----------|-------------|---------|
-| 01 | `template-01` | — | coming soon |
-| 02 | `template-02` | — | coming soon |
-| 03 | `template-03` | — | coming soon |
-| 04 | `template-04` | — | coming soon |
-| 05 | `template-05` | — | coming soon |
+| 01 | `1_youtuber-website` | — | coming soon |
+| 02 | `2_musician-website` | — | coming soon |
+| 03 | `3_minecraft-website` | — | coming soon |
+| 04 | `4_developer-website` | — | coming soon |
+| 05 | `5_portfolio-website` | — | coming soon |
 
-> 💡 **Tip:** Replace the descriptions and preview links once your templates are live.
+> 💡 **Tip:** Replace the descriptions once you use the templates.
 
 ---
 
 ## 🚀 Usage
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/Plutooo/website-templates.git
+# 1. Download the file
 
-# 2. Navigate into a template
-cd website-templates/template-01
-
-# 3. Open in browser
-open index.html
+# 2. Open in browser
+open 'dataname'.html
 ```
 
 No build step. No install. Just open `index.html` and go.
